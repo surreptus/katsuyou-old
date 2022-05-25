@@ -1,25 +1,35 @@
+import { ChakraProvider } from '@chakra-ui/react'
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import Progress from './components/Progress'
+import Prompt from './components/Prompt'
+import Layout from './components/Layout'
+
 function App() {
+  const question = {
+    verb: '食べる',
+    sentence: '納豆を食べよう'
+  }
+
+  function handleGuess() {
+    return {
+      conjugation: 'test',
+      translated: 'hello world'
+    }
+  }
+
+  function handleProceed() {
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <Layout>
+        <Progress />
+
+        <Prompt question={question} onGuess={handleGuess} onProceed={handleProceed}/>
+      </Layout>
+    </ChakraProvider>
   );
 }
 
