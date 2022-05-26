@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/katsuyou/static/css/main.073c9b0a.css",
-    "main.js": "/katsuyou/static/js/main.6da54d87.js",
+    "main.js": "/katsuyou/static/js/main.3b13be68.js",
     "static/js/787.29ccbb48.chunk.js": "/katsuyou/static/js/787.29ccbb48.chunk.js",
     "index.html": "/katsuyou/index.html",
     "main.073c9b0a.css.map": "/katsuyou/static/css/main.073c9b0a.css.map",
-    "main.6da54d87.js.map": "/katsuyou/static/js/main.6da54d87.js.map",
+    "main.3b13be68.js.map": "/katsuyou/static/js/main.3b13be68.js.map",
     "787.29ccbb48.chunk.js.map": "/katsuyou/static/js/787.29ccbb48.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.6da54d87.js"
+    "static/js/main.3b13be68.js"
   ]
 }
