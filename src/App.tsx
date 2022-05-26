@@ -3,6 +3,7 @@ import React, { useState }from 'react';
 import './App.css';
 import conjugate from 'utilities/conjugate'
 import lessons from 'lessons.json'
+import theme from 'theme'
 
 import Progress from './components/Progress'
 import Prompt from './components/Prompt'
@@ -20,7 +21,7 @@ function App() {
   }
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Layout>
         <Progress />
 

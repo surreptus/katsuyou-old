@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@types/wanakana": "^4.0.3",
     "gh-pages": "^4.0.0",
     "unofficial-jisho-api": "^2.3.0"
   }

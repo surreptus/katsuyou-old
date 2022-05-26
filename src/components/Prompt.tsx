@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Stack, Button, Input } from '@chakra-ui/react'
-import { Formik, FormikHelpers, Form, Field, FieldProps } from 'formik'
+import { Box, Heading, Stack, Button, Text } from '@chakra-ui/react'
+import { Formik, FormikHelpers, Form, Field } from 'formik'
 import { Question, Answer } from '../types'
+import KanaInput from 'components/KanaInput'
 
 interface Props {
   question: Question;
@@ -27,8 +28,14 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
 
   return (
     <div>
-      {question.verb}
-      {question.sentence}
+      <Box textAlign='center'>
+        <Heading fontFamily='japanese' textStyle='h1'>
+          {question.verb}
+        </Heading>
+        <Text>
+          {question.sentence}
+        </Text>
+      </Box>
 
       <Formik
         enableReinitialize
@@ -47,25 +54,16 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
           return (
             <Form>
               <Stack spacing='4' direction='row'>
-                <Field name='guess'>
-                  {({ field, form }: FieldProps<string>) => (
-                    <Input
-                      {...field}
-                      bg={hasAnswered ? 'green' : 'transparent'}
-                      disabled={hasAnswered}
-                      lang='jp'
-                    />
-                  )}
-                </Field>
+                <Field name='guess' as={KanaInput} />
 
                 {hasAnswered && (
-                  <Button onClick={handleReset} type='reset'>
+                  <Button size='lg' onClick={handleReset} type='reset'>
                     Next
                   </Button>
                 )}
 
                 {!hasAnswered  && (
-                  <Button type='submit'>
+                  <Button size='lg' type='submit'>
                     Submit
                   </Button>
                 )}
@@ -77,10 +75,10 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
     </Formik>
 
       {answer && (
-        <div>
+        <Text fontSize='xl' pt='4' align='center'>
           {answer.conjugation}
           {answer.translated}
-        </div>
+        </Text>
       )}
     </div>
   )
