@@ -1,4 +1,5 @@
 import React from 'react'
+import { Container } from '@chakra-ui/react'
 
 interface Props {
   children: JSX.Element[]
@@ -6,8 +7,8 @@ interface Props {
 
 export default function Layout ({ children }: Props) {
   return (
-    <div>
+    <Container py='10'>
       {children}
-    </div>
+    </Container>
   )
 }
