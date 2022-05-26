@@ -1,25 +1,22 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import React from 'react';
+import React, { useState }from 'react';
 import './App.css';
+import conjugate from 'utilities/conjugate'
+import lessons from 'lessons.json'
 
 import Progress from './components/Progress'
 import Prompt from './components/Prompt'
 import Layout from './components/Layout'
 
 function App() {
-  const question = {
-    verb: '食べる',
-    sentence: '納豆を食べよう'
-  }
+  const [current, setCurrent] = useState(0)
+  const question = lessons[current]
 
-  function handleGuess() {
+  const handleGuess = () => {
     return {
-      conjugation: 'test',
+      conjugation: conjugate(question.verb, 'present', question.group),
       translated: 'hello world'
     }
-  }
-
-  function handleProceed() {
   }
 
   return (
@@ -27,7 +24,11 @@ function App() {
       <Layout>
         <Progress />
 
-        <Prompt question={question} onGuess={handleGuess} onProceed={handleProceed}/>
+        <Prompt
+          question={question}
+          onGuess={handleGuess}
+          onProceed={() => setCurrent(current + 1)}
+        />
       </Layout>
     </ChakraProvider>
   );

@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Button, Input } from '@chakra-ui/react'
+import { Stack, Button, Input } from '@chakra-ui/react'
 import { Formik, FormikHelpers, Form, Field, FieldProps } from 'formik'
-import { Inflection, Group, Question, Answer } from '../types'
-import conjugate from '../utilities/conjugate'
+import { Question, Answer } from '../types'
 
 interface Props {
   question: Question;
@@ -17,17 +16,13 @@ interface FormValues {
 export default function Prompt ({ question, onGuess, onProceed }: Props) {
   const [answer, setAnswer] = useState<Answer | null>()
 
-  console.log(conjugate('derp', Inflection.Present, Group.Ichidan))
-
-  const handleSubmit = ({ guess }: FormValues) => {
+  const handleSubmit = (
+    { guess }: FormValues,
+    { setStatus }: FormikHelpers<FormValues>
+  ) => {
     const answer = onGuess(guess)
+    setStatus('answered')
     setAnswer(answer)
-  }
-
-  const handleReset = (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
-    setAnswer(null)
-    resetForm()
-    onProceed()
   }
 
   return (
@@ -36,38 +31,45 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
       {question.sentence}
 
       <Formik
-        onReset={handleReset}
+        enableReinitialize
         onSubmit={handleSubmit}
         initialValues={{
           guess: ''
         }}>
         {(form) => {
           const hasAnswered = form.status === 'answered'
+
+          function handleReset () {
+            form.handleReset()
+            onProceed()
+          }
           
           return (
             <Form>
-              <Field name='guess'>
-                {({ field, form }: FieldProps<string>) => (
-                  <Input
-                    {...field}
-                    bg={hasAnswered ? 'green' : 'transparent'}
-                    disabled={hasAnswered}
-                    lang='jp'
-                  />
+              <Stack spacing='4' direction='row'>
+                <Field name='guess'>
+                  {({ field, form }: FieldProps<string>) => (
+                    <Input
+                      {...field}
+                      bg={hasAnswered ? 'green' : 'transparent'}
+                      disabled={hasAnswered}
+                      lang='jp'
+                    />
+                  )}
+                </Field>
+
+                {hasAnswered && (
+                  <Button onClick={handleReset} type='reset'>
+                    Next
+                  </Button>
                 )}
-              </Field>
 
-              {hasAnswered && (
-                <Button type='reset'>
-                  Reset
-                </Button>
-              )}
-
-              {!hasAnswered  && (
-                <Button type='submit'>
-                  Submit
-                </Button>
-              )}
+                {!hasAnswered  && (
+                  <Button type='submit'>
+                    Submit
+                  </Button>
+                )}
+              </Stack>
             </Form>
           )
         }}

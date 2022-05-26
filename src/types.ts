@@ -9,18 +9,18 @@ export interface Answer {
 }
 
 export enum Inflection {
-  Present,
-  PresentNegative,
-  Polite,
-  PoliteNegative,
-  Past,
-  PastNegative,
-  Te,
-  TeNegative
+  Present = 'present',
+  PresentNegative = 'present-negative',
+  Polite = 'polite',
+  PoliteNegative = 'polite-negative',
+  Past = 'past',
+  PastNegative = 'past-negative',
+  Te = 'te',
+  TeNegative = 'te-negative'
 }
 
 export enum Group {
-  Ichidan,
-  Godan,
-  Irregular 
+  Ichidan = 'ichidan',
+  Godan = 'godan',
+  Irregular = 'irregular'
 }

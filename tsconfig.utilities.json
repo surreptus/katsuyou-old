@@ -1,0 +1,8 @@
+{
+  "files": [
+    "src/utilities/conjugate"
+  ],
+  "compilerOptions": {
+    "outDir": "scripts"
+  }
+}
