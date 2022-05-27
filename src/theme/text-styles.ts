@@ -1,6 +1,6 @@
 const textStyles = {
   h1: {
-    fontSize: '4.5rem',
+    fontSize: '6rem',
     fontWeight: 400
   },
   h2: {

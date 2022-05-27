@@ -29,7 +29,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
   return (
     <div>
       <Box textAlign='center'>
-        <Heading fontFamily='japanese' textStyle='h1'>
+        <Heading fontFamily='japanese' size='4xl'>
           {question.verb}
         </Heading>
         <Text>
