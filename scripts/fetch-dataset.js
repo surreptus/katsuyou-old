@@ -1,34 +1,22 @@
 const JishoAPI = require('unofficial-jisho-api')
 const path = require('path')
 const fs = require('node:fs/promises')
-const conjugate = require('./utilities/conjugate')
 const { Group, Inflection }= require('./types')
-
-console.log(conjugate)
+const JsLingua = require('jslingua')
 
 const TAGS = [
   'v1',
 ]
 
-const SUPPORTED_INFLECTIONS = Object.values(Inflection)
+const SUPPORTED_INFLECTIONS = [
+  'present',
+  'past'
+]
 
+const morpho = JsLingua.gserv('morpho', 'jpn')
 const jisho = new JishoAPI()
 
-/**
- * returns the group to be used for the given tag
- */
-
-function getGroupFromTag(tag) {
-  switch (tag) {
-    case 'v1':
-      return Group.Ichidan
-    case 'v5k-s':
-    case 'vs':
-      return Group.Irregular
-    default:
-      return Group.Godan
-  }
-}
+console.log(morpho)
 
 /**
  * returns a set of verbs for each group that are common
@@ -50,11 +38,15 @@ async function conjugateSupported(verbs) {
   const result = {}
 
   for (const tag in verbs) {
-    const group = getGroupFromTag(tag)
-    result[group] = verbs[tag]
+    result[tag] = verbs[tag]
       .reduce((carry, verb) =>
         carry.concat(SUPPORTED_INFLECTIONS.map(
-          inflection => conjugate.default(verb.slug, inflection, group)
+          inflection => {
+return morpho.conj(verb.slug, {
+            tense: inflection,
+            formality: 'polite'
+          })
+          }
         )), []
       )
   }
@@ -70,7 +62,6 @@ async function conjugateSupported(verbs) {
 async function fetchExamples(terms) {
   const searches = await Promise.all(terms.map(async (term) => {
     const { results, uri } = await jisho.searchForExamples(term)
-    console.log(uri)
     return [term, results]
   }))
 
@@ -84,8 +75,6 @@ async function fetchData() {
   const result = await fetchVerbs()
   console.log('conjugated', conjugateSupported(result))
   // const result = await fetchExamples(['食べた'])
-
-  console.log(result)
 }
 
 fetchData()
