@@ -3,6 +3,7 @@
     "src/utilities/conjugate"
   ],
   "compilerOptions": {
+    "module": "CommonJS",
     "outDir": "scripts"
   }
 }

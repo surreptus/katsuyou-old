@@ -1,18 +1,13 @@
 import { extendTheme } from '@chakra-ui/react'
 
 import textStyles from './text-styles'
+import components from './components'
 
 export default extendTheme({
+  ...components,
   fonts: {
     english: 'Rubik, sans-serif',
     japanese: '"Kosugi Maru", sans-serif'
-  },
-  components: {
-    Heading: {
-      baseStyle: {
-        fontWeight: 400
-      }
-    }
   },
   textStyles,
   styles: {

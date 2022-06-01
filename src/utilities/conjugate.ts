@@ -1,7 +1,13 @@
 import { Inflection, Group }  from '../types'
 
 function conjugateIchidan(verb: string, inflection: string) {
-  const root = verb.slice(0, -1)
+  let root
+  try {
+    root = verb.slice(0, -1)
+  } catch (error) {
+    console.info(verb)
+    console.error(error)
+  }
 
   switch (inflection) {
     case Inflection.Present:

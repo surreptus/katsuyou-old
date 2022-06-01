@@ -32,6 +32,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
         <Heading fontFamily='japanese' size='4xl'>
           {question.verb}
         </Heading>
+
         <Text>
           {question.sentence}
         </Text>

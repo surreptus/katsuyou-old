@@ -2,7 +2,14 @@
 exports.__esModule = true;
 var types_1 = require("../types");
 function conjugateIchidan(verb, inflection) {
-    var root = verb.slice(0, -1);
+    var root;
+    try {
+        root = verb.slice(0, -1);
+    }
+    catch (error) {
+        console.info(verb);
+        console.error(error);
+    }
     switch (inflection) {
         case types_1.Inflection.Present:
             return "".concat(root, "\u308B");
@@ -17,8 +24,10 @@ function conjugateIchidan(verb, inflection) {
     }
 }
 function conjugateGodan(verb, inflection) {
+    return verb;
 }
 function conjugateIrregular(verb, inflection) {
+    return verb;
 }
 function conjugate(verb, inflection, group) {
     switch (group) {

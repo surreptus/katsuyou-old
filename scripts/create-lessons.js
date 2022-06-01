@@ -6,9 +6,6 @@ const { Inflection, Group } = require('./types')
 
 const ROOT = path.resolve(__dirname, '..')
 
-console.log(verbs)
-console.log(Inflection, Group)
-
 function getGroupFromTag(tag) {
     switch (tag) {
         case 'v1':
