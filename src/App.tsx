@@ -9,9 +9,23 @@ import Progress from './components/Progress'
 import Prompt from './components/Prompt'
 import Layout from './components/Layout'
 
+const fake = [
+  {
+    sentence: 'りんごをたべます',
+    verb: '食べる',
+    parts: ['りんご', 'を', '食べます'],
+    inflection: {
+      tense: 'past',
+      formality: 'polite'
+    },
+    conjugated: '食べます',
+    group: 'ichidan'
+  }
+]
+
 function App() {
   const [current, setCurrent] = useState(0)
-  const question = lessons[current]
+  const question = fake[current]
 
   const handleGuess = () => {
     return {

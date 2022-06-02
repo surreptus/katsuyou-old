@@ -14,6 +14,10 @@ interface FormValues {
   guess: string;
 }
 
+const INITIAL_VALUES: FormValues = {
+  guess: ''
+}
+
 export default function Prompt ({ question, onGuess, onProceed }: Props) {
   const [answer, setAnswer] = useState<Answer | null>()
 
@@ -41,9 +45,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
       <Formik
         enableReinitialize
         onSubmit={handleSubmit}
-        initialValues={{
-          guess: ''
-        }}>
+        initialValues={INITIAL_VALUES}>
         {(form) => {
           const hasAnswered = form.status === 'answered'
 
@@ -55,7 +57,14 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
           return (
             <Form>
               <Stack spacing='4' direction='row'>
-                <Field name='guess' as={KanaInput} />
+                <Stack direction='row'>
+                  {question.parts.map(part => {
+                    return part ===  question.conjugated
+                      ? 
+                        <Field name='guess' as={KanaInput} /> 
+                        : <Text fontSize='4xl' whiteSpace='nowrap'>{part}</Text>
+                  })}
+                </Stack>
 
                 {hasAnswered && (
                   <Button size='lg' onClick={handleReset} type='reset'>
@@ -72,7 +81,6 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
             </Form>
           )
         }}
-      
     </Formik>
 
       {answer && (

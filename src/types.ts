@@ -1,6 +1,12 @@
 export interface Question {
   verb: string;
   sentence: string;
+  parts: string[],
+  inflection: {
+    formality: string,
+    tense: string
+  },
+  conjugated: string
 }
 
 export interface Answer {

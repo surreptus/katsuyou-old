@@ -1,7 +1,9 @@
 import Heading from './heading'
+import Text from './text'
 
 const components = {
-  Heading
+  Heading,
+  Text,
 }
 
 export default components
