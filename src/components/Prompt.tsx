@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Heading, Stack, Button, Text } from '@chakra-ui/react'
+import { Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverHeader, PopoverBody, Box, Heading, Stack, Button, Text } from '@chakra-ui/react'
 import { Formik, FormikHelpers, Form, Field } from 'formik'
 import { Question, Answer } from '../types'
 import KanaInput from 'components/KanaInput'
@@ -18,6 +18,8 @@ const INITIAL_VALUES: FormValues = {
   guess: ''
 }
 
+const sentence = {"english":"What do you think about having breakfast at McDonald's?","kanji":"マクドナルドで朝食を食べませんか。","kana":"マクドナルドでちょうしょくをたべませんか。","pieces":[{"lifted":"","unlifted":"マクドナルド"},{"lifted":"","unlifted":"で"},{"lifted":"ちょうしょく","unlifted":"朝食"},{"lifted":"","unlifted":"を"},{"lifted":"た","unlifted":"食べません"},{"lifted":"","unlifted":"か"}]}
+
 export default function Prompt ({ question, onGuess, onProceed }: Props) {
   const [answer, setAnswer] = useState<Answer | null>()
 
@@ -32,16 +34,6 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
 
   return (
     <div>
-      <Box textAlign='center'>
-        <Heading fontFamily='japanese' size='4xl'>
-          {question.verb}
-        </Heading>
-
-        <Text>
-          {question.sentence}
-        </Text>
-      </Box>
-
       <Formik
         enableReinitialize
         onSubmit={handleSubmit}
@@ -56,15 +48,31 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
           
           return (
             <Form>
-              <Stack spacing='4' direction='row'>
-                <Stack direction='row'>
-                  {question.parts.map(part => {
-                    return part ===  question.conjugated
-                      ? 
-                        <Field name='guess' as={KanaInput} /> 
-                        : <Text fontSize='4xl' whiteSpace='nowrap'>{part}</Text>
-                  })}
-                </Stack>
+              <Stack py='12' alignItems='center'spacing='4' direction='column'>
+                <Popover trigger='hover'>
+                  <PopoverTrigger>
+                    <Stack justify='center' direction='row'>
+                      {question.example.parts.map(part => {
+                        return part ===  question.verb.answer
+                          ? 
+                            (
+                              <Stack direction='row' key={part} alignItems='center'>
+                                <Field width={question.verb.answer.length * 36 + 'px'} name='guess' as={KanaInput} /> 
+
+                                <Text color='blue.500' fontSize='4xl' whiteSpace='nowrap'>
+                                  ({question.verb.japanese})
+                                </Text>
+                              </Stack>
+                          )
+                          : <Text key={part}fontSize='4xl' whiteSpace='nowrap'>{part}</Text>
+                      })}
+                    </Stack>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverHeader>{question.verb.japanese} - {question.verb.english}</PopoverHeader>
+                    <PopoverBody>{question.example.english}</PopoverBody>
+                  </PopoverContent>
+                </Popover>
 
                 {hasAnswered && (
                   <Button size='lg' onClick={handleReset} type='reset'>
@@ -73,7 +81,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
                 )}
 
                 {!hasAnswered  && (
-                  <Button size='lg' type='submit'>
+                  <Button colorScheme='green' size='lg' type='submit'>
                     Submit
                   </Button>
                 )}
@@ -82,13 +90,6 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
           )
         }}
     </Formik>
-
-      {answer && (
-        <Text fontSize='xl' pt='4' align='center'>
-          {answer.conjugation}
-          {answer.translated}
-        </Text>
-      )}
     </div>
   )
 }

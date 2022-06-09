@@ -11,14 +11,20 @@ import Layout from './components/Layout'
 
 const fake = [
   {
-    sentence: 'りんごをたべます',
-    verb: '食べる',
-    parts: ['りんご', 'を', '食べます'],
+    example: {
+      japanese:  'りんごをたべます',
+      english: 'I eat an apple',
+      parts: ['りんご', 'を', '食べます']
+    },
+    verb: {
+      japanese:  '食べる',
+      english: 'to eat',
+      answer: '食べます'
+    },
     inflection: {
       tense: 'past',
       formality: 'polite'
     },
-    conjugated: '食べます',
     group: 'ichidan'
   }
 ]
@@ -29,7 +35,7 @@ function App() {
 
   const handleGuess = () => {
     return {
-      conjugation: conjugate(question.verb, 'present', question.group),
+      conjugation: conjugate(question.verb.japanese, 'present', question.group),
       translated: 'hello world'
     }
   }

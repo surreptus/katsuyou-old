@@ -1,8 +1,10 @@
 const JishoAPI = require('unofficial-jisho-api')
 const path = require('path')
 const fs = require('node:fs/promises')
-const { Group, Inflection }= require('./types')
 const JsLingua = require('jslingua')
+
+const { SRC_PATH, DATASETS_PATH } = require('./constants')
+const { Group, Inflection }= require('./types')
 
 const TAGS = [
   'v1',
@@ -15,8 +17,6 @@ const SUPPORTED_INFLECTIONS = [
 
 const morpho = JsLingua.gserv('morpho', 'jpn')
 const jisho = new JishoAPI()
-
-console.log(morpho)
 
 /**
  * returns a set of verbs for each group that are common
@@ -72,9 +72,11 @@ async function fetchExamples(terms) {
 }
 
 async function fetchData() {
-  const result = await fetchVerbs()
-  console.log('conjugated', conjugateSupported(result))
-  // const result = await fetchExamples(['食べた'])
+  const verbs = await fetchVerbs()
+  const examples = await fetchExamples(['食べる', '食べた', '食べます', '食べません'])
+
+  fs.writeFile(path.join(DATASETS_PATH, 'examples.json'), JSON.stringify(examples), 'utf-8')
+  fs.writeFile(path.join(DATASETS_PATH, 'verbs.json'), JSON.stringify(verbs), 'utf-8')
 }
 
 fetchData()

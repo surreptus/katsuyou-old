@@ -1,12 +1,18 @@
 export interface Question {
-  verb: string;
-  sentence: string;
-  parts: string[],
+  verb: {
+    answer: string;
+    japanese: string;
+    english: string;
+  };
+  example: {
+    japanese: string;
+    parts: string[];
+    english: string
+  }
   inflection: {
     formality: string,
     tense: string
   },
-  conjugated: string
 }
 
 export interface Answer {

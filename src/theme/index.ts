@@ -4,7 +4,7 @@ import textStyles from './text-styles'
 import components from './components'
 
 export default extendTheme({
-  ...components,
+  components,
   fonts: {
     english: 'Rubik, sans-serif',
     japanese: '"Kosugi Maru", sans-serif'

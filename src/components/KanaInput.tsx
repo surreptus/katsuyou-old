@@ -19,9 +19,10 @@ export default function KanaInput({ onChange, value, ...rest }: Props) {
     <Input
       {...rest}
       ref={inputRef}
+      variant='flushed'
       onChange={handleChange}
       value={toHiragana(value)}
-      size='lg'
+      fontSize='4xl'
       lang='jp'
     />
   )
