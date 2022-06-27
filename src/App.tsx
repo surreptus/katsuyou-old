@@ -1,4 +1,4 @@
-import { ChakraProvider, Text } from '@chakra-ui/react'
+import { ChakraProvider, Box, Heading, Text } from '@chakra-ui/react'
 import React, { useState }from 'react';
 import './App.css';
 import lessons from 'lessons.json'
@@ -49,9 +49,9 @@ function App() {
   const handleNext = () => {
     const next = current + 1
 
-    console.log(next, fake.length)
+    console.info(next, fake.length)
 
-    if (next === fake.length - 1) {
+    if (next === fake.length) {
       return setComplete(true)
     }
 
@@ -66,9 +66,14 @@ function App() {
         <>
           {
             complete && (
-              <Text>
-                You're done!
-              </Text>
+              <Box textAlign='center'>
+                <Heading>
+                  You're done!
+                </Heading>
+                <Text>
+                  You've answered all the questions. Restart for the next round.
+                </Text>
+              </Box>
             )
           }
 
@@ -77,7 +82,7 @@ function App() {
               <Prompt
                 question={question}
                 onGuess={handleGuess}
-                onProceed={() => setCurrent(current + 1)}
+                onProceed={handleNext}
               />
             )
           }

@@ -23,8 +23,10 @@ const INITIAL_VALUES: FormValues = {
 export default function Prompt ({ question, onGuess, onProceed }: Props) {
   const handleSubmit = (
     { guess }: FormValues,
-    { setStatus, resetForm }: FormikHelpers<FormValues>
+    { setStatus }: FormikHelpers<FormValues>
   ) => {
+    console.info('submited')
+    setStatus('answered')
     onGuess(guess)
   }
 
@@ -41,7 +43,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
             form.handleReset()
             onProceed()
           }
-          
+
           return (
             <Form>
               <Stack py='12' alignItems='center'spacing='4' direction='column'>
@@ -72,6 +74,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
                       })}
                     </Stack>
                   </PopoverTrigger>
+
                   <PopoverContent>
                     <PopoverHeader>{question.verb} - {question.meaning}</PopoverHeader>
                     <PopoverBody>{question.translation}</PopoverBody>
@@ -93,7 +96,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
             </Form>
           )
         }}
-    </Formik>
+      </Formik>
     </div>
   )
 }
