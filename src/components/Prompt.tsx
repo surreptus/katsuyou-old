@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import { Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverCloseButton, PopoverHeader, PopoverBody, Box, Heading, Stack, Button, Text } from '@chakra-ui/react'
+import React from 'react'
+import { Badge, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, Stack, Button, Text } from '@chakra-ui/react'
 import { Formik, FormikHelpers, Form, Field } from 'formik'
-import { Question, Answer } from '../types'
+import { Question } from '../types'
 import KanaInput from 'components/KanaInput'
 
 interface Props {
   question: Question;
-  onGuess: (guess: string) => Answer;
+  onGuess: (guess: string) => void;
   onProceed: () => void;
 }
 
@@ -18,18 +18,14 @@ const INITIAL_VALUES: FormValues = {
   guess: ''
 }
 
-const sentence = {"english":"What do you think about having breakfast at McDonald's?","kanji":"マクドナルドで朝食を食べませんか。","kana":"マクドナルドでちょうしょくをたべませんか。","pieces":[{"lifted":"","unlifted":"マクドナルド"},{"lifted":"","unlifted":"で"},{"lifted":"ちょうしょく","unlifted":"朝食"},{"lifted":"","unlifted":"を"},{"lifted":"た","unlifted":"食べません"},{"lifted":"","unlifted":"か"}]}
+// const sentence = {"english":"What do you think about having breakfast at McDonald's?","kanji":"マクドナルドで朝食を食べませんか。","kana":"マクドナルドでちょうしょくをたべませんか。","pieces":[{"lifted":"","unlifted":"マクドナルド"},{"lifted":"","unlifted":"で"},{"lifted":"ちょうしょく","unlifted":"朝食"},{"lifted":"","unlifted":"を"},{"lifted":"た","unlifted":"食べません"},{"lifted":"","unlifted":"か"}]}
 
 export default function Prompt ({ question, onGuess, onProceed }: Props) {
-  const [answer, setAnswer] = useState<Answer | null>()
-
   const handleSubmit = (
     { guess }: FormValues,
-    { setStatus }: FormikHelpers<FormValues>
+    { setStatus, resetForm }: FormikHelpers<FormValues>
   ) => {
-    const answer = onGuess(guess)
-    setStatus('answered')
-    setAnswer(answer)
+    onGuess(guess)
   }
 
   return (
@@ -49,18 +45,26 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
           return (
             <Form>
               <Stack py='12' alignItems='center'spacing='4' direction='column'>
+                <Stack direction='row' spacing='4'>
+                  <Badge size='lg'>{question.target.sentiment}</Badge>
+
+                  <Badge size='lg'>{question.target.inflection}</Badge>
+
+                  <Badge size='lg'>{question.target.formality}</Badge>
+                </Stack>
+
                 <Popover trigger='hover'>
                   <PopoverTrigger>
                     <Stack justify='center' direction='row'>
-                      {question.example.parts.map(part => {
-                        return part ===  question.verb.answer
+                      {question.sentence.map(part => {
+                        return part ===  question.answer
                           ? 
                             (
                               <Stack direction='row' key={part} alignItems='center'>
-                                <Field width={question.verb.answer.length * 36 + 'px'} name='guess' as={KanaInput} /> 
+                                <Field autoFocus width={question.answer.length * 36 + 'px'} name='guess' as={KanaInput} /> 
 
                                 <Text color='blue.500' fontSize='4xl' whiteSpace='nowrap'>
-                                  ({question.verb.japanese})
+                                  ({question.verb})
                                 </Text>
                               </Stack>
                           )
@@ -69,8 +73,8 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
                     </Stack>
                   </PopoverTrigger>
                   <PopoverContent>
-                    <PopoverHeader>{question.verb.japanese} - {question.verb.english}</PopoverHeader>
-                    <PopoverBody>{question.example.english}</PopoverBody>
+                    <PopoverHeader>{question.verb} - {question.meaning}</PopoverHeader>
+                    <PopoverBody>{question.translation}</PopoverBody>
                   </PopoverContent>
                 </Popover>
 

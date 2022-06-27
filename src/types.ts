@@ -1,17 +1,14 @@
 export interface Question {
-  verb: {
-    answer: string;
-    japanese: string;
-    english: string;
-  };
-  example: {
-    japanese: string;
-    parts: string[];
-    english: string
-  }
-  inflection: {
-    formality: string,
-    tense: string
+  group: string;
+  verb: string;
+  meaning: string;
+  sentence: string[];
+  translation: string;
+  answer: string;
+  target: {
+    formality: string;
+    inflection: string;
+    sentiment: string;
   },
 }
 
