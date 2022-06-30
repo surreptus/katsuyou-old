@@ -1,8 +1,9 @@
 import React from 'react'
-import { Badge, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, Stack, Button, Text } from '@chakra-ui/react'
+import { Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, Stack, Button, Text } from '@chakra-ui/react'
 import { Formik, FormikHelpers, Form, Field } from 'formik'
 import { Question } from '../types'
-import KanaInput from 'components/KanaInput'
+import Target from './Target'
+import KanaInput from './KanaInput'
 
 interface Props {
   question: Question;
@@ -25,78 +26,89 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
     { guess }: FormValues,
     { setStatus }: FormikHelpers<FormValues>
   ) => {
-    console.info('submited')
     setStatus('answered')
     onGuess(guess)
   }
 
+  const handleReset = () => {
+    onProceed()
+  }
+
   return (
-    <div>
-      <Formik
-        enableReinitialize
-        onSubmit={handleSubmit}
-        initialValues={INITIAL_VALUES}>
-        {(form) => {
-          const hasAnswered = form.status === 'answered'
+    <Formik
+      enableReinitialize
+      onReset={handleReset}
+      onSubmit={handleSubmit}
+      initialValues={INITIAL_VALUES}
+    >
+      {({ values, status }) => {
+        const isCorrect = values.guess === question.answer
+        const hasAnswered = status === 'answered'
 
-          function handleReset () {
-            form.handleReset()
-            onProceed()
-          }
+        return (
+          <Form>
+            <Stack py='12' alignItems='center'spacing='4' direction='column'>
+              <Target value={question.target} />
 
-          return (
-            <Form>
-              <Stack py='12' alignItems='center'spacing='4' direction='column'>
-                <Stack direction='row' spacing='4'>
-                  <Badge size='lg'>{question.target.sentiment}</Badge>
+              <Popover trigger='hover'>
+                <PopoverTrigger>
+                  <Stack justify='center' direction='row'>
+                    {question.sentence.map(part => {
+                      return part ===  question.answer
+                        ? 
+                          (
+                            <Stack direction='row' key={part} alignItems='center'>
+                              <Field
+                                color={hasAnswered
+                                  ? isCorrect ? 'green' : 'red'
+                                  : 'inherit'
+                                }
+                                autoFocus
+                                width={question.answer.length * 36 + 'px'}
+                                name='guess'
+                                disabled={hasAnswered}
+                                value={hasAnswered
+                                  ? question.answer
+                                  : values.guess
+                                }
+                                as={KanaInput}
+                              /> 
 
-                  <Badge size='lg'>{question.target.inflection}</Badge>
+                              <Text color='blue.500' fontSize='4xl' whiteSpace='nowrap'>
+                                ({question.verb})
+                              </Text>
+                            </Stack>
+                        )
+                        : (
+                          <Text key={part} fontSize='4xl' whiteSpace='nowrap'>
+                            {part}
+                          </Text>
+                        )
+                    })}
+                  </Stack>
+                </PopoverTrigger>
 
-                  <Badge size='lg'>{question.target.formality}</Badge>
-                </Stack>
+                <PopoverContent>
+                  <PopoverHeader>{question.verb} - {question.meaning}</PopoverHeader>
+                  <PopoverBody>{question.translation}</PopoverBody>
+                </PopoverContent>
+              </Popover>
 
-                <Popover trigger='hover'>
-                  <PopoverTrigger>
-                    <Stack justify='center' direction='row'>
-                      {question.sentence.map(part => {
-                        return part ===  question.answer
-                          ? 
-                            (
-                              <Stack direction='row' key={part} alignItems='center'>
-                                <Field autoFocus width={question.answer.length * 36 + 'px'} name='guess' as={KanaInput} /> 
+              {hasAnswered && (
+                <Button size='lg' type='reset'>
+                  Next
+                </Button>
+              )}
 
-                                <Text color='blue.500' fontSize='4xl' whiteSpace='nowrap'>
-                                  ({question.verb})
-                                </Text>
-                              </Stack>
-                          )
-                          : <Text key={part}fontSize='4xl' whiteSpace='nowrap'>{part}</Text>
-                      })}
-                    </Stack>
-                  </PopoverTrigger>
-
-                  <PopoverContent>
-                    <PopoverHeader>{question.verb} - {question.meaning}</PopoverHeader>
-                    <PopoverBody>{question.translation}</PopoverBody>
-                  </PopoverContent>
-                </Popover>
-
-                {hasAnswered && (
-                  <Button size='lg' onClick={handleReset} type='reset'>
-                    Next
-                  </Button>
-                )}
-
-                {!hasAnswered  && (
-                  <Button colorScheme='green' size='lg' type='submit'>
-                    Submit
-                  </Button>
-                )}
-              </Stack>
-            </Form>
-          )
-        }}
-      </Formik>
-    </div>
+              {!hasAnswered  && (
+                <Button colorScheme='green' size='lg' type='submit'>
+                  Submit
+                </Button>
+              )}
+            </Stack>
+          </Form>
+        )
+      }}
+    </Formik>
   )
 }
