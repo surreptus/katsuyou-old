@@ -34,7 +34,20 @@ const fake = [
       inflection: 'present',
       formality: 'plain'
     }
-  }
+  },
+  {
+    group: 'ichidan',
+    verb: '食べる',
+    meaning: 'to eat',
+    sentence: ['りんご', 'を', '食べます'],
+    translation: 'I eat an apple',
+    answer: '食べます',
+    target: {
+      sentiment: 'positive',
+      inflection: 'volitional',
+      formality: 'polite'
+    }
+  },
 ]
 
 function App() {
@@ -49,19 +62,16 @@ function App() {
   const handleNext = () => {
     const next = current + 1
 
-    console.info(next, fake.length)
-
+    setCurrent(next)
     if (next === fake.length) {
       return setComplete(true)
     }
-
-    return setCurrent(next)
   }
 
   return (
     <ChakraProvider theme={theme}>
       <Layout>
-        <Progress total={total} current={current + 1} />
+        <Progress total={total} current={current} />
 
         <>
           {
@@ -82,7 +92,7 @@ function App() {
               <Prompt
                 question={question}
                 onGuess={handleGuess}
-                onProceed={handleNext}
+                onNext={handleNext}
               />
             )
           }

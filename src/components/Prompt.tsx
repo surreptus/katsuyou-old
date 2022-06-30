@@ -8,7 +8,7 @@ import KanaInput from './KanaInput'
 interface Props {
   question: Question;
   onGuess: (guess: string) => void;
-  onProceed: () => void;
+  onNext: () => void;
 }
 
 interface FormValues {
@@ -21,7 +21,7 @@ const INITIAL_VALUES: FormValues = {
 
 // const sentence = {"english":"What do you think about having breakfast at McDonald's?","kanji":"マクドナルドで朝食を食べませんか。","kana":"マクドナルドでちょうしょくをたべませんか。","pieces":[{"lifted":"","unlifted":"マクドナルド"},{"lifted":"","unlifted":"で"},{"lifted":"ちょうしょく","unlifted":"朝食"},{"lifted":"","unlifted":"を"},{"lifted":"た","unlifted":"食べません"},{"lifted":"","unlifted":"か"}]}
 
-export default function Prompt ({ question, onGuess, onProceed }: Props) {
+export default function Prompt ({ question, onGuess, onNext }: Props) {
   const handleSubmit = (
     { guess }: FormValues,
     { setStatus }: FormikHelpers<FormValues>
@@ -30,20 +30,19 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
     onGuess(guess)
   }
 
-  const handleReset = () => {
-    onProceed()
-  }
-
   return (
     <Formik
       enableReinitialize
-      onReset={handleReset}
       onSubmit={handleSubmit}
       initialValues={INITIAL_VALUES}
     >
-      {({ values, status }) => {
+      {({ values, status, handleReset }) => {
         const isCorrect = values.guess === question.answer
         const hasAnswered = status === 'answered'
+        const derp = () => {
+          handleReset()
+          onNext()
+        }
 
         return (
           <Form>
@@ -95,7 +94,7 @@ export default function Prompt ({ question, onGuess, onProceed }: Props) {
               </Popover>
 
               {hasAnswered && (
-                <Button size='lg' type='reset'>
+                <Button onClick={derp}size='lg' type='reset'>
                   Next
                 </Button>
               )}
