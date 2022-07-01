@@ -1,5 +1,15 @@
 import React from 'react'
-import { Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, Stack, Button, Text } from '@chakra-ui/react'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  Stack,
+  Button,
+  Text
+} from '@chakra-ui/react'
+import { toHiragana  } from 'wanakana'
 import { Formik, FormikHelpers, Form, Field } from 'formik'
 import { Question } from '../types'
 import Target from './Target'
@@ -37,7 +47,7 @@ export default function Prompt ({ question, onGuess, onNext }: Props) {
       initialValues={INITIAL_VALUES}
     >
       {({ values, status, handleReset }) => {
-        const isCorrect = values.guess === question.answer
+        const isCorrect = values.guess === toHiragana(question.answer)
         const hasAnswered = status === 'answered'
         const derp = () => {
           handleReset()
