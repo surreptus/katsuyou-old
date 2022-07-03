@@ -19,7 +19,7 @@ const fake = [
     target: {
       sentiment: 'positive',
       inflection: 'volitional',
-      formality: 'polite'
+      formality: 'plain'
     }
   },
   {
