@@ -16,7 +16,7 @@ import Target from './Target'
 import KanaInput from './KanaInput'
 
 interface Props {
-  question: Question;
+  lesson: Question;
   onGuess: (guess: string) => void;
   onNext: () => void;
 }
@@ -31,12 +31,14 @@ const INITIAL_VALUES: FormValues = {
 
 // const sentence = {"english":"What do you think about having breakfast at McDonald's?","kanji":"マクドナルドで朝食を食べませんか。","kana":"マクドナルドでちょうしょくをたべませんか。","pieces":[{"lifted":"","unlifted":"マクドナルド"},{"lifted":"","unlifted":"で"},{"lifted":"ちょうしょく","unlifted":"朝食"},{"lifted":"","unlifted":"を"},{"lifted":"た","unlifted":"食べません"},{"lifted":"","unlifted":"か"}]}
 
-export default function Prompt ({ question, onGuess, onNext }: Props) {
+export default function Prompt ({ lesson, onGuess, onNext }: Props) {
+  const sentence = lesson.sentences[0]
+
   const handleSubmit = (
     { guess }: FormValues,
     { setStatus }: FormikHelpers<FormValues>
   ) => {
-    setStatus('answered')
+    setStatus('conjugationed')
     onGuess(guess)
   }
 
@@ -47,8 +49,8 @@ export default function Prompt ({ question, onGuess, onNext }: Props) {
       initialValues={INITIAL_VALUES}
     >
       {({ values, status, handleReset }) => {
-        const isCorrect = values.guess === toHiragana(question.answer)
-        const hasAnswered = status === 'answered'
+        const isCorrect = values.guess === toHiragana(lesson.conjugation)
+        const hasAnswered = status === 'conjugationed'
         const derp = () => {
           handleReset()
           onNext()
@@ -57,40 +59,42 @@ export default function Prompt ({ question, onGuess, onNext }: Props) {
         return (
           <Form>
             <Stack py='12' alignItems='center'spacing='4' direction='column'>
-              <Target value={question.target} />
+              <Target value={lesson.inflection} />
 
               <Popover trigger='hover'>
                 <PopoverTrigger>
-                  <Stack justify='center' direction='row'>
-                    {question.sentence.map(part => {
-                      return part ===  question.answer
+                  <Stack justify='center' direction='row' flexWrap='wrap'>
+                    {sentence.original.map(part => {
+                      console.log('---------')
+                      console.log(part.unlifted, part.lifted, lesson.conjugation)
+                      return part.unlifted === lesson.conjugation
                         ? 
                           (
-                            <Stack direction='row' key={part} alignItems='center'>
+                            <Stack direction='row' key={part.unlifted} alignItems='center'>
                               <Field
                                 color={hasAnswered
                                   ? isCorrect ? 'green' : 'red'
                                   : 'inherit'
                                 }
                                 autoFocus
-                                width={question.answer.length * 36 + 'px'}
+                                width={lesson.conjugation.length * 36 + 'px'}
                                 name='guess'
                                 disabled={hasAnswered}
                                 value={hasAnswered
-                                  ? question.answer
+                                  ? lesson.conjugation
                                   : values.guess
                                 }
                                 as={KanaInput}
                               /> 
 
                               <Text color='blue.500' fontSize='4xl' whiteSpace='nowrap'>
-                                ({question.verb})
+                                ({lesson.verb})
                               </Text>
                             </Stack>
                         )
                         : (
-                          <Text key={part} fontSize='4xl' whiteSpace='nowrap'>
-                            {part}
+                          <Text key={part.unlifted} fontSize='4xl' whiteSpace='nowrap'>
+                            {part.unlifted}
                           </Text>
                         )
                     })}
@@ -98,8 +102,8 @@ export default function Prompt ({ question, onGuess, onNext }: Props) {
                 </PopoverTrigger>
 
                 <PopoverContent>
-                  <PopoverHeader>{question.verb} - {question.meaning}</PopoverHeader>
-                  <PopoverBody>{question.translation}</PopoverBody>
+                  <PopoverHeader>{lesson.verb} - {lesson.meaning}</PopoverHeader>
+                  <PopoverBody>{sentence.translation}</PopoverBody>
                 </PopoverContent>
               </Popover>
 

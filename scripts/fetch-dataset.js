@@ -24,7 +24,7 @@ const { Group, Inflection }= require('./types')
  * @property { string } meaning
  * @property { string[] } sentence 
  * @property { string } translation
- * @property { string } answer
+ * @property { string } conjugation
  * @property { Inflection } inflection
  */
 
@@ -184,9 +184,16 @@ function filterInvalid (lessons) {
 
 async function fetchData() {
   const verbs = await fetchVerbs()
-  const conjugated = await conjugateSupported(verbs.slice(0,1))
 
-  const examples = await fetchExamples(conjugated)
+  const conjugated = await conjugateSupported(verbs.slice(0,4))
+
+  let examples = []
+
+  for (let i = 0; i < conjugated.length; i++) {
+    await delay(1)
+    examples = examples.concat(await fetchExamples([conjugated[i]]))
+  }
+
   const lessons = filterInvalid(examples)
 
   // fs.writeFile(path.join(DATASETS_PATH, 'examples.json'), JSON.stringify(examples), 'utf-8')

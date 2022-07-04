@@ -8,53 +8,13 @@ import Progress from './components/Progress'
 import Prompt from './components/Prompt'
 import Layout from './components/Layout'
 
-const fake = [
-  {
-    group: 'ichidan',
-    verb: '食べる',
-    meaning: 'to eat',
-    sentence: ['りんご', 'を', '食べます'],
-    translation: 'I eat an apple',
-    answer: '食べます',
-    target: {
-      sentiment: 'positive',
-      inflection: 'volitional',
-      formality: 'plain'
-    }
-  },
-  {
-    group: 'ichidan',
-    verb: '見る',
-    meaning: 'to see',
-    sentence: ['映画', 'を', 'みる'],
-    translation: 'I watch movies',
-    answer: 'みる',
-    target: {
-      sentiment: 'positive',
-      inflection: 'present',
-      formality: 'plain'
-    }
-  },
-  {
-    group: 'ichidan',
-    verb: '食べる',
-    meaning: 'to eat',
-    sentence: ['りんご', 'を', '食べます'],
-    translation: 'I eat an apple',
-    answer: '食べます',
-    target: {
-      sentiment: 'positive',
-      inflection: 'volitional',
-      formality: 'polite'
-    }
-  },
-]
+const test = lessons.slice(0,10)
 
 function App() {
   const [current, setCurrent] = useState(0)
   const [complete, setComplete] = useState(false)
-  const question = fake[current]
-  const total = fake.length
+  const lesson = test[current]
+  const total = test.length
 
   const handleGuess = () => {
   }
@@ -63,7 +23,7 @@ function App() {
     const next = current + 1
 
     setCurrent(next)
-    if (next === fake.length) {
+    if (next === test.length) {
       return setComplete(true)
     }
   }
@@ -90,7 +50,7 @@ function App() {
           {
             !complete && (
               <Prompt
-                question={question}
+                lesson={lesson}
                 onGuess={handleGuess}
                 onNext={handleNext}
               />

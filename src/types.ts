@@ -2,13 +2,20 @@ export interface Question {
   group: string;
   verb: string;
   meaning: string;
-  sentence: string[];
-  translation: string;
-  answer: string;
-  target: {
+  sentences: {
+    translation: string;
+    original: {
+      unlifted: string;
+      lifted: string
+    }[];
+  }[];
+  conjugation: string;
+  inflection: {
+    tense?: string;
+    mood?: string;
+    aspect?: string;
     formality: string;
-    inflection: string;
-    sentiment: string;
+    negated?: boolean;
   },
 }
 
